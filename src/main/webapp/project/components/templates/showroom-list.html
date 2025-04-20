@@ -1,0 +1,75 @@
+<template tag-name="showroom-list">
+
+    <div lyte-if="{{isNotFound}}" class="not-found">
+        <div class="not-content">
+            No Showrooms Currently available
+        </div>
+
+    </div>
+    <div lyte-else="{{isNotFound}}">
+        <div class="top-section">
+            <lyte-button class="back-btn" onclick="{{action('goBack')}}">
+                <span class="back-arrow">&larr;</span>
+                <span class="back-text">Back</span>
+            </lyte-button>
+            <h3>SHOWROOM DETAILS</h3>
+            <lyte-button class="sync-btn" onclick="{{action('syncShowrooms')}}">
+                <span class="icon">⟳</span>
+                <span>Sync</span>
+            </lyte-button>
+        </div>
+        <card-comp>
+            <template is="yield" yield-name="content">
+                <table class="company-table">
+                    <thead>
+                        <tr>
+                            <th>SHOWROOM NAME</th>
+                            <th>COMPANY NAME</th>
+                            <th>MANAGER NAME</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody lyte-for="{{showrooms}} as showroom index">
+
+                        <tr>
+                            <td>{{showroom.showroomName}}</td>
+                            <td>{{showroom.company.companyName}}</td>
+                            <td>{{showroom.user.userName}}</td>
+
+
+                            <td class="admin-actions">
+
+                                <div lyte-if="{{isAdmin}}">
+
+                                    <lyte-button lyte-if="{{showroom.isActive}}" class="company-update-btn">
+                                        <!-- {{action update company.brand_code company.company_name company.started_year}} -->
+                                        EDIT
+                                    </lyte-button>
+
+                                    <lyte-button lyte-if="{{showroom.isActive}}" class="company-deactivate-btn">
+                                        <!-- {{action deactivate company.brand_code}} -->
+                                        DEACTIVATE
+                                    </lyte-button>
+
+                                    <lyte-button lyte-else="{{showroom.isActive}}" class="company-activate-btn">
+                                        <!-- {{action activate company.brand_code}} -->
+                                        ACTIVATE
+                                    </lyte-button>
+
+                                    <lyte-button lyte-if="{{showroom.isActive}}" class="company-delete-btn">
+                                        <!-- {{action delete company.brand_code}} -->
+                                        DELETE
+                                    </lyte-button>
+                                </div>
+                                <lyte-button lyte-else="{{isAdmin}}" class="view-showroom-btn"
+                                    onclick="{{action('redirectToModels',showroom.company.id,showroom.id)}}">
+                                    View Models
+                                </lyte-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+        </card-comp>
+    </div>
+</template>

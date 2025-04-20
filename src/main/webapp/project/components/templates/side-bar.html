@@ -1,0 +1,17 @@
+<template tag-name="side-bar">
+    
+    <div class="side-nav">
+
+
+        <div class="nav-list">
+            <lyte-nav-item class="nav-item" lyte-for="{{items}} as item index">
+                <link-to lt-prop-route={{item.route}} class="nav-item-link">{{item.label}}</link-to>
+            </lyte-nav-item>
+        </div>
+
+
+    </div>
+            
+       
+        
+</template>

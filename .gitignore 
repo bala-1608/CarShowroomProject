@@ -1,0 +1,31 @@
+# macOS system file
+.DS_Store
+
+# Eclipse-specific files
+.classpath
+.project
+.settings/
+
+# Java build output
+build/
+
+# Ignore class files
+*.class
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+
+# Lyte Project
+
+webapps/project/node_modules/
+webapps/project/dist/
+webapps/project/.cache/
+webapps/project/.DS_Store

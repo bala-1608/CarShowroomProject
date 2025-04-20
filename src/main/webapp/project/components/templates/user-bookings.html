@@ -1,0 +1,43 @@
+<template tag-name="user-bookings">
+    <div lyte-if="{{isNotFound}}" class="not-found">
+        <div class="not-content">
+            No Bookings Available
+        </div>
+    </div>
+    <div lyte-else="{{isNotFound}}">
+        <h3 class="details">BOOKINGS DETAILS</h3>
+        
+        <card-comp>
+            <template is="yield" yield-name="content">
+                <table class="company-table">
+                    <thead>
+                        <tr>
+                            <th>COMPANY NAME</th>
+                            <th>SHOWROOM NAME</th>
+                            <th>MODEL NAME </th>
+                            <th>MODEL COLOR</th>
+                            <th>MODEL PRICE</th>
+                            <th>BOOKING TYPE</th>
+                            <th>STATUS</th>
+                            <th>BOOKING DATE</th>
+                        </tr>
+                    </thead>
+                    <tbody lyte-for="{{bookings}} as booking index">
+
+                        <tr>
+                            <td>{{booking.showroom.company.companyName}}</td>
+                            <td>{{booking.showroom.name}}</td>
+                            <td>{{booking.model.modelName}}</td>
+                            <td>{{booking.model.color}}</td>
+                            <td>{{booking.model.price}}</td>
+                            <td>{{booking.bookingType}}</td>
+                            <td>{{booking.status}}</td>
+                            <td>{{booking.requestDate}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+        </card-comp>
+    </div>
+
+</template>

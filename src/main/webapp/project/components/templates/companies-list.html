@@ -1,0 +1,56 @@
+<template tag-name="companies-list">
+
+    <div lyte-if="{{isNotFound}}" class="not-found">
+        <div class="not-content">
+            No Companies Currently available
+        </div>
+
+    </div>
+    <div lyte-else="{{isNotFound}}">
+        <div class="top-section">
+            <lyte-button class="back-btn" onclick="{{action('goBack')}}">
+                <span class="back-arrow">&larr;</span>
+                <span class="back-text">Back</span>
+            </lyte-button>
+            <h3 >COMPANY DETAILS</h3>
+            <lyte-button lt-prop-label="Sync" class="sync-btn" onclick="{{action('syncCompanies')}}">
+                <span class="icon">⟳</span>
+                <span>Sync</span>
+            </lyte-button>
+        </div>
+        
+        <card-comp>
+            <template is="yield" yield-name="content">
+                <table class="company-table">
+                    <thead>
+                        <tr>
+                            <th>COMPANY NAME</th>
+                            <th>STARTED YEAR</th>
+                            <th>ADMIN NAME</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody lyte-for="{{companyList}} as company index">
+            
+                        <tr>
+                            <td>{{company.companyName}}</td>
+                            <td>{{company.startedYear}}</td>
+                            <td>{{company.user.userName}}</td>
+            
+            
+                            <td class="admin-actions">
+                                <lyte-button class="view-showroom-btn"
+                                    onclick="{{action('redirectToShowrooms',company.id)}}">
+                                    View Showrooms
+                                </lyte-button>
+            
+                            </td>
+            
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+        </card-comp>
+    </div>
+
+</template>

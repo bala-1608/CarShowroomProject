@@ -1,0 +1,40 @@
+<template tag-name="login-comp">
+    <!-- <lyte-button>button</lyte-button>
+    <lyte-input lt-prop-placeholder = "Enter some text">Input </lyte-input> -->
+    <div class="container type2">
+        <div class="box">
+            <div class="left-section"></div>
+    
+            <div class="right-section">
+                <div class="in-box">
+                    <div class="authentication-form">
+    
+                        
+                        <div class="login-form">
+                            <h2>Login into Your Account</h2>
+    
+                            <div class="input-group">
+                                <!-- lt-prop-appearance ='box -->
+                                <lyte-input lt-prop-id="email" lt-prop-type ='text'  class="input-field" lt-prop-placeholder = "Email" lt-prop-value="{{lbind(email)}}"></lyte-input>
+                                <div lyte-if={{emailError}} class="error"> {{emailError}}</div>
+                            </div>
+    
+                            <div class="input-group">
+                                <lyte-input lt-prop-id="password" lt-prop-type = 'password' class="input-field"  lt-prop-maxlength="8" lt-prop-password-icon =true lt-prop-placeholder = "Password" lt-prop-value="{{lbind(password)}}"></lyte-input>
+                                <div lyte-if={{passwordError}} class="error"> {{passwordError}} </div>
+                               
+                            </div>
+                            
+                            <lyte-button class="btn" onclick="{{action('newLogin')}}">Sign In</lyte-button>
+    
+                            <p class="link-text">
+                                Don't have an account? <a href="register" >Sign up</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</template>
