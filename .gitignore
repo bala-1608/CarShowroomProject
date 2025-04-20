@@ -1,27 +1,41 @@
+# Java build output
+/build/
+/target/
+/out/
 
-# Ignore build output
-/build
-/build/classes
+# Eclipse specific files
+*.classpath
+*.project
+*.settings/
 
-# Ignore Eclipse files
-.classpath
-.project
-.settings/
+# Maven / Gradle specific
+*.log
+*.war
+*.ear
+*.jar
 
-# Ignore macOS system files
+# Node.js dependencies and build artifacts
+/src/main/webapp/project/node_modules/
+/src/main/webapp/project/dist/
+/src/main/webapp/project/build/
+/src/main/webapp/project/package-lock.json
+
+# Logs
+*.log
+
+# OS files
 .DS_Store
+Thumbs.db
 
-# Ignore compiled classes
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# IDEs
+.vscode/
+.idea/
+
+# Compiled class files
 *.class
 
-# Ignore dependency JARs
-src/main/webapp/WEB-INF/lib/
-
-# Ignore Ember build output
-src/main/webapp/project/dist/*
-src/main/webapp/project/tmp/*
-
-# Ignoring specific files in the project dist directory
-/src/main/webapp/project/node_modules/*
-/src/main/webapp/project/build
-/src/main/webapp/project/dist/*
