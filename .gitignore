@@ -1,0 +1,27 @@
+
+# Ignore build output
+/build
+/build/classes
+
+# Ignore Eclipse files
+.classpath
+.project
+.settings/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore compiled classes
+*.class
+
+# Ignore dependency JARs
+src/main/webapp/WEB-INF/lib/
+
+# Ignore Ember build output
+src/main/webapp/project/dist/*
+src/main/webapp/project/tmp/*
+
+# Ignoring specific files in the project dist directory
+/src/main/webapp/project/node_modules/*
+/src/main/webapp/project/build
+/src/main/webapp/project/dist/*
