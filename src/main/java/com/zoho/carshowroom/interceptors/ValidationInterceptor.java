@@ -13,6 +13,8 @@ import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.sql.SQLException;
 import java.util.*;
 
@@ -20,12 +22,14 @@ public class ValidationInterceptor extends AbstractInterceptor {
 
     private static final long serialVersionUID = 1L;
 	private final DataAccessObject dao = new DataAccessObject();
+	private Map<String, Object> jsonResponse;
 
     public String intercept(ActionInvocation invocation) throws Exception {
     	
     	
     	
         HttpServletRequest req = ServletActionContext.getRequest();
+        HttpServletResponse res = ServletActionContext.getResponse();
         String method = req.getMethod().toUpperCase();
         String uri = req.getRequestURI();
         String[] parts = uri.split("/");
@@ -33,12 +37,16 @@ public class ValidationInterceptor extends AbstractInterceptor {
 
         String sessionId = getSessionIdFromCookies(req);
         if (sessionId == null) {
-            return Utility.mapToJson(Utility.jsonResponse(401, "Un Authorized", null)); 
+            setJsonResponse(Utility.jsonResponse(401, "Un Authorized", null));
+            Utility.sendResponse(res, jsonResponse);
+            return "error";
         }
 
         ZSession session = getSessionFromDB(sessionId);
         if (session == null) {
-        	return Utility.mapToJson(Utility.jsonResponse(401, "Un Authorized", null)); 
+        	setJsonResponse(Utility.jsonResponse(401, "Un Authorized", null));
+        	Utility.sendResponse(res, jsonResponse);
+            return "error";
         }
 
         SessionContext.set(session);
@@ -47,11 +55,15 @@ public class ValidationInterceptor extends AbstractInterceptor {
         
 
         if (!RolePermissions.hasAccess(roleId, method, uri)) {
-        	return Utility.mapToJson(Utility.jsonResponse(401, "Un Authorized", null)); 
+        	setJsonResponse(Utility.jsonResponse(401, "Un Authorized", null));
+        	Utility.sendResponse(res, jsonResponse);
+            return "error";
         }
 
         if (!validateEntities(paths, roleId, userID, method)) {
-        	return Utility.mapToJson(Utility.jsonResponse(401, "Un Authorized", null)); 
+        	setJsonResponse(Utility.jsonResponse(401, "Un Authorized", null));
+        	Utility.sendResponse(res, jsonResponse);
+            return "error"; 
         }
 
         return invocation.invoke();
@@ -174,6 +186,14 @@ public class ValidationInterceptor extends AbstractInterceptor {
                 null, null, whereColumns, whereOperators, whereValues,
                 List.of(Utility.AND), null, null, null, false, null).size() > 0;
     }
+
+	public Map<String, Object> getJsonResponse() {
+		return jsonResponse;
+	}
+
+	public void setJsonResponse(Map<String, Object> jsonResponse) {
+		this.jsonResponse = jsonResponse;
+	}
     
 }
 

@@ -4,9 +4,10 @@ store.registerSerializer("bookings", {
     },
     serialize: function (type, payLoad, records, customData, modelName, queryParams, gql) {
         if(type==='createRecord'){
-            payLoad.booking_type = payLoad.bookingType;
-            delete payLoad.bookingType;
+            // payLoad.booking_type = payLoad.bookingType;
+            // delete payLoad.bookingType;
         }
+		
         return payLoad;
     },
     normalizeResponse: function (modelName, type, payLoad, pkValue, status, headers, queryParams, customData, opts) {
@@ -36,6 +37,11 @@ store.registerSerializer("bookings", {
 				modelName: item.model_name,
 				color: item.color,
 				price: item.price
+
+			},
+			user:{
+				userId:item.customer_id,
+				userName:item.name
 
 			},
 			requestDate: item.request_date

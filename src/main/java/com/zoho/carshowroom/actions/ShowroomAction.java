@@ -4,11 +4,16 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.zoho.carshowroom.engines.ShowroomsEngine;
 import com.zoho.carshowroom.models.ZShowroom;
+import com.zoho.carshowroom.util.Utility;
 
-public class ShowroomAction extends ActionSupport {
+public class ShowroomAction extends ActionSupport  {
 
 	private static final long serialVersionUID = 1L;
 	private String httpMethod;
@@ -18,6 +23,7 @@ public class ShowroomAction extends ActionSupport {
     private ShowroomsEngine engine = new ShowroomsEngine();
     private Integer companyId;
     private Integer showroomId;
+   
 
     
     public Integer getCompanyId() {
@@ -59,12 +65,13 @@ public class ShowroomAction extends ActionSupport {
     public String execute() {
 
     	
-    	System.out.println("Company ID = " + companyId);
-    	System.out.println("isActive = " + isActive);
+    	
+    	HttpServletResponse res = ServletActionContext.getResponse();
         switch (httpMethod.toUpperCase()) {
             case "GET":
 			try {
 				jsonResponse=engine.get(companyId,showroomId,isActive);
+				Utility.sendResponse(res, jsonResponse);
 				return SUCCESS;
 			} catch (IOException | SQLException e) {
 				e.printStackTrace();

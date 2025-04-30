@@ -13,7 +13,7 @@ import com.zoho.carshowroom.util.Utility;
 public class CompanyDAO {
 	private QueryExecutor executor = new QueryExecutor();
 
-	public List<Map<String, Object>> getCompanies(Integer companyId, Boolean isActive) throws SQLException {
+	public List<Map<String, Object>> getCompanies(Integer companyId, Boolean isActive,int pageNumber, int pageSize) throws SQLException {
 
 		QueryBuilder builder = new QueryBuilder();
 		StringBuilder str = new StringBuilder();
@@ -36,7 +36,7 @@ public class CompanyDAO {
 				.append(TableMapping.USER.getTableName()).append(".")
 				.append(TableMapping.getColumnByField(TableMapping.USER, "userId"));
 		
-		builder.setJoin("", TableMapping.USER.getTableName(), str.toString());
+		builder.setJoin("", TableMapping.USER.getTableName(), str.toString()).setLimitAndOffset(pageNumber, pageSize);
 
 		if (!Utility.isNull(companyId)) {
 			builder.setWhere(TableMapping.getColumnByField(TableMapping.COMPANY, "brandCode"), Utility.EQUAL,

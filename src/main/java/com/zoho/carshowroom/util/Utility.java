@@ -3,6 +3,8 @@ package com.zoho.carshowroom.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeParseException;
@@ -215,7 +217,6 @@ public class Utility {
 			System.out.println("in"+responseMap);
 			resp.setStatus((int) responseMap.get("status"));
 			SessionContext.clear();
-			resp.getWriter().write(Utility.mapToJson(responseMap));
 			resp.getWriter().flush();
 			
 		} catch (IOException e) {
@@ -246,6 +247,15 @@ public class Utility {
 	        return params;
 	    }
 
+	    public static String UUIDGenerator() {
+	    	
+	    	SecureRandom random = new SecureRandom();
+	        byte[] bytes = new byte[16];
+	        random.nextBytes(bytes);
+	        BigInteger id = new BigInteger(1, bytes);
+	        System.out.println("Random 128-bit ID: " );
+	    	return id.toString(16);
+	    }
 
 }
 //	public static Object validator (Object obj) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException {

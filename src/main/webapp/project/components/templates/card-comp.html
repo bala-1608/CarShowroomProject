@@ -1,194 +1,181 @@
 <template tag-name="card-comp">
 
-        <div class="top-section">
+	<template lyte-if="{{isPopup}}">
+		<delete-popup operation="{{operation}}" action1="{{method('execute')}}" action2="{{method('cancelCompany')}}"
+			id="{{company}}"> </delete-popup>
+	</template>
 
-                <template lyte-if="{{isOnly}}">
-                        <h3>{{name}} DETAILS</h3>
-                </template>
+	<div class="top-section">
 
-                <template lyte-else="{{isOnly}}">
-                        <lyte-button lyte-if="{{isCompany}}" class="back-btn" onclick="{{action('goBackToHome')}}">
-                                <span class="material-symbols-outlined">arrow_back_ios</span>
-                                <span class="back-text">Back</span>
-                        </lyte-button>
+		<template lyte-if="{{isOnly}}">
+			<h3>{{name}} DETAILS</h3>
+		</template>
 
-                        <lyte-button lyte-if="{{isShowroom}}" class="back-btn"
-                                onclick="{{action('goBackToCompanies')}}">
-                                <span class="material-symbols-outlined">arrow_back_ios </span>
-                                <span class="back-text">Back</span>
-                        </lyte-button>
+		<template lyte-else="{{isOnly}}">
+			<lyte-button lyte-if="{{isCompany}}" class="back-btn" onclick="{{action('goBackToHome')}}"> <span
+					class="material-symbols-outlined">arrow_back_ios</span> <span class="back-text">Back</span>
+			</lyte-button>
 
-                        <lyte-button lyte-if="{{isModel}}" class="back-btn" onclick="{{action('goBackToShowrooms')}}">
-                                <span class="material-symbols-outlined">arrow_back_ios</span>
-                                <span class="back-text">Back</span>
-                        </lyte-button>
-                        <h3 class="page-text">{{name}} DETAILS</h3>
-                        <lyte-button lyte-if="{{isCompany}}" lt-prop-label="Sync" class="sync-btn"
-                                onclick="{{action('syncCompanies')}}">
-                                <span class="material-symbols-outlined">refresh</span>
-                                <span>Sync</span>
-                        </lyte-button>
-                        <lyte-button lyte-if="{{isShowroom}}" lt-prop-label="Sync" class="sync-btn"
-                                onclick="{{action('syncShowrooms')}}">
-                                <span class="material-symbols-outlined">refresh</span>
-                                <span>Sync</span>
-                        </lyte-button>
-                        <lyte-button lyte-if="{{isModel}}" lt-prop-label="Sync" class="sync-btn"
-                                onclick="{{action('syncModels')}}">
-                                <span class="material-symbols-outlined">refresh</span>
-                                <span>Sync</span>
-                        </lyte-button>
-                </template>
+			<lyte-button lyte-if="{{isShowroom}}" class="back-btn" onclick="{{action('goBackToCompanies')}}"> <span
+					class="material-symbols-outlined">arrow_back_ios</span> <span class="back-text">Back</span>
+			</lyte-button>
 
-        </div>
+			<lyte-button lyte-if="{{isModel}}" class="back-btn" onclick="{{action('goBackToShowrooms')}}"> <span
+					class="material-symbols-outlined"> arrow_back_ios</span> <span class="back-text">Back</span>
+			</lyte-button>
+			<h3>{{name}} DETAILS</h3>
+			<lyte-button lyte-if="{{isCompany}}" lt-prop-label="Sync" class="sync-btn"
+				onclick="{{action('syncCompanies')}}">
+				<span class="material-symbols-outlined"> refresh</span> <span>Sync</span>
+			</lyte-button>
+			<lyte-button lyte-if="{{isShowroom}}" lt-prop-label="Sync" class="sync-btn"
+				onclick="{{action('syncShowrooms')}}">
+				<span class="material-symbols-outlined"> refresh</span> <span>Sync</span>
+			</lyte-button>
+			<lyte-button lyte-if="{{isModel}}" lt-prop-label="Sync" class="sync-btn" onclick="{{action('syncModels')}}">
+				<span class="material-symbols-outlined"> refresh</span> <span>Sync</span>
+			</lyte-button>
+		</template>
 
-        <div lyte-if="{{isNotFound}}" class="not-found">
-                <div class="not-content">
-                        {{notFound}}
-                </div>
+	</div>
 
-        </div>
-        <div lyte-else="{{isNotFound}}">
+	<div lyte-if="{{isNotFound}}" class="not-found">
+		<div class="not-content">{{notFound}}</div>
 
-                <table class="company-table">
-                        <thead>
+	</div>
+	<div lyte-else="{{isNotFound}}" class="scrollable-table" onscroll="{{action('onScroll',event)}}">
 
-                                <tr lyte-if="{{isCompany}}">
-                                        <th>COMPANY NAME</th>
-                                        <th>STARTED YEAR</th>
-                                        <th>ADMIN NAME</th>
-                                        <th>ACTIONS</th>
-                                </tr>
+		<table class="company-table" >
+			<thead>
 
-                                <tr lyte-if="{{isShowroom}}">
-                                        <th>SHOWROOM NAME</th>
-                                        <th>COMPANY NAME</th>
-                                        <th>MANAGER NAME</th>
-                                        <th>ACTIONS</th>
-                                </tr>
-                                <tr lyte-if="{{isModel}}">
-                                        <th>COMPANY NAME</th>
-                                        <th>MODEL NAME</th>
-                                        <th>MODEL PRICE</th>
-                                        <th>MODEL COLOR</th>
-                                        <th>ACTIONS</th>
-                                </tr>
+				<tr lyte-if="{{isCompany}}">
+					<th>COMPANY NAME</th>
+					<th>STARTED YEAR</th>
+					<th>ADMIN NAME</th>
+					<th>ACTIONS</th>
+				</tr>
 
-                                <tr lyte-if="{{isBooking}}">
-                                        <th>COMPANY NAME</th>
-                                        <th>SHOWROOM NAME</th>
-                                        <th>MODEL NAME </th>
-                                        <th>MODEL COLOR</th>
-                                        <th>MODEL PRICE</th>
-                                        <th>BOOKING TYPE</th>
-                                        <th>STATUS</th>
-                                        <th>BOOKING DATE</th>
-                                </tr>
+				<tr lyte-if="{{isShowroom}}">
+					<th>SHOWROOM NAME</th>
+					<th>COMPANY NAME</th>
+					<th>MANAGER NAME</th>
+					<th>ACTIONS</th>
+				</tr>
+				<tr lyte-if="{{isModel}}">
+					<th>COMPANY NAME</th>
+					<th>MODEL NAME</th>
+					<th>MODEL PRICE</th>
+					<th>MODEL COLOR</th>
+					<th>ACTIONS</th>
+				</tr>
 
-                                <tr lyte-if="{{isOwnedCars}}">
-                                        <th>COMPANY NAME</th>
-                                        <th>SHOWROOM NAME</th>
-                                        <th>MODEL NAME </th>
-                                        <th>MODEL COLOR</th>
-                                        <th>MODEL PRICE</th>
-                                        <th>DELIVERED DATE</th>
-                                </tr>
+				<tr lyte-if="{{isBooking}}">
+					<th>COMPANY NAME</th>
+					<th>SHOWROOM NAME</th>
+					<th>MODEL NAME</th>
+					<th>MODEL COLOR</th>
+					<th>MODEL PRICE</th>
+					<th>BOOKING TYPE</th>
+					<th>STATUS</th>
+					<th>BOOKING DATE</th>
+				</tr>
 
-                        </thead>
-                        <tbody lyte-for="{{fields}} as field index">
+				<tr lyte-if="{{isOwnedCars}}">
+					<th>COMPANY NAME</th>
+					<th>SHOWROOM NAME</th>
+					<th>MODEL NAME</th>
+					<th>MODEL COLOR</th>
+					<th>MODEL PRICE</th>
+					<th>DELIVERED DATE</th>
+				</tr>
 
-                                <tr lyte-if="{{isCompany}}">
+				<tr lyte-if="{{isManagerPanel}}">
+					<th>MODEL NAME</th>
+					<th>MODEL COLOR</th>
+					<th>PRICE</th>
+					<th>CUSTOMER NAME</th>
+					<th>BOOKING TYPE</th>
+					<th>BOOKED DATE</th>
+					<th>ACTION</th>
+				</tr>
 
-                                        <td>{{field.companyName}}</td>
-                                        <td>{{field.startedYear}}</td>
-                                        <td>{{field.user.userName}}</td>
+			</thead>
+			<tbody lyte-for="{{fields}} as field index">
 
-                                        <td class="admin-actions" lyte-if="{{isAppAdminPanel}}">
+				<tr lyte-if="{{isCompany}}">
 
+					<td>{{field.companyName}}</td>
+					<td>{{field.startedYear}}</td>
+					<td>{{field.user.userName}}</td>
 
-                                                <lyte-button class="company-update-btn"
-                                                        onclick="{{action('updateCompany',field.id,field.companyName,field.startedYear)}}">
-                                                        EDIT
-                                                </lyte-button>
+					<td class="admin-actions" lyte-if="{{isAppAdminPanel}}"><lyte-button class="company-update-btn"
+							onclick="{{action('updateCompany',field.id,field.companyName,field.startedYear)}}">
+							EDIT </lyte-button> <lyte-button lyte-if="{{field.isActive}}" class="company-deactivate-btn"
+							onclick="{{action('openConfirmationPopup',field.id,'deactivate')}}">
+							DEACTIVATE </lyte-button> <lyte-button lyte-else="{{field.isActive}}"
+							class="company-activate-btn"
+							onclick="{{action('openConfirmationPopup',field.id,'activate')}}">
+							ACTIVATE </lyte-button> <lyte-button class="company-delete-btn"
+							onclick="{{action('openConfirmationPopup',field.id,'delete')}}">
+							DELETE </lyte-button></td>
 
-                                                <lyte-button lyte-if="{{field.isActive}}" class="company-deactivate-btn"
-                                                        onclick="{{action('deactivateCompany',field.id)}}">
-                                                        DEACTIVATE
-                                                </lyte-button>
+					<td class="admin-actions" lyte-else="{{isAppAdminPanel}}"><lyte-button class="view-showroom-btn"
+							onclick="{{action('redirectToShowrooms',field.id)}}">
+							View Showrooms </lyte-button></td>
+				</tr>
+				<tr lyte-if="{{isShowroom}}">
+					<td>{{field.showroomName}}</td>
+					<td>{{field.company.companyName}}</td>
+					<td>{{field.user.userName}}</td>
+					<td class="admin-actions"><lyte-button class="view-showroom-btn"
+							onclick="{{action('redirectToModels',field.company.id,field.id)}}">
+							View Models </lyte-button></td>
 
-                                                <lyte-button lyte-else="{{field.isActive}}" class="company-activate-btn"
-                                                        onclick="{{action('activateCompany',field.id)}}">
-                                                        ACTIVATE
-                                                </lyte-button>
-
-                                                <lyte-button class="company-delete-btn"
-                                                        onclick="{{action('deleteCompany',field.id)}}">
-                                                        DELETE
-                                                </lyte-button>
-                                        </td>
-
-                                        <td class="admin-actions" lyte-else="{{isAppAdminPanel}}">
-                                                <lyte-button class="view-showroom-btn"
-                                                        onclick="{{action('redirectToShowrooms',field.id)}}">
-                                                        View Showrooms
-                                                </lyte-button>
-
-                                        </td>
-                                </tr>
-                                <tr lyte-if="{{isShowroom}}">
-                                        <td>{{field.showroomName}}</td>
-                                        <td>{{field.company.companyName}}</td>
-                                        <td>{{field.user.userName}}</td>
-                                        <td class="admin-actions">
-                                                <lyte-button class="view-showroom-btn"
-                                                        onclick="{{action('redirectToModels',field.company.id,field.id)}}">
-                                                        View Models
-                                                </lyte-button>
-                                        </td>
-
-                                </tr>
-                                <tr lyte-if="{{isModel}}">
-                                        <td>{{field.showroom.company.companyName}}</td>
-                                        <td>{{field.modelName}}</td>
-                                        <td>{{field.price}}</td>
-                                        <td>{{field.color}}</td>
+				</tr>
+				<tr lyte-if="{{isModel}}">
+					<td>{{field.showroom.company.companyName}}</td>
+					<td>{{field.modelName}}</td>
+					<td>{{field.price}}</td>
+					<td>{{field.color}}</td>
 
 
-                                        <td class="admin-actions">
-                                                <lyte-button class="view-showroom-btn"
-                                                        onclick="{{action('bookDelivery',field.showroom.company.id,field.showroom.id,field.id,field.price)}}">
-                                                        BOOK
-                                                </lyte-button>
-                                        </td>
+					<td class="admin-actions"><lyte-button class="view-showroom-btn"
+							onclick="{{action('bookDelivery',field.showroom.company.id,field.showroom.id,field.id,field.price)}}">
+							BOOK </lyte-button></td>
 
-                                </tr>
-                                <tr lyte-if="{{isBooking}}">
-                                        <td>{{field.showroom.company.companyName}}</td>
-                                        <td>{{field.showroom.name}}</td>
-                                        <td>{{field.model.modelName}}</td>
-                                        <td>{{field.model.color}}</td>
-                                        <td>{{field.model.price}}</td>
-                                        <td>{{field.bookingType}}</td>
-                                        <td>{{field.status}}</td>
-                                        <td>{{field.requestDate}}</td>
-                                </tr>
+				</tr>
+				<tr lyte-if="{{isBooking}}">
+					<td>{{field.showroom.company.companyName}}</td>
+					<td>{{field.showroom.name}}</td>
+					<td>{{field.model.modelName}}</td>
+					<td>{{field.model.color}}</td>
+					<td>{{field.model.price}}</td>
+					<td>{{field.user.name}}</td>
+					<td>{{field.bookingType}}</td>
+					<td>{{field.requestDate}}</td>
+				</tr>
 
-                                <tr lyte-if="{{isOwnedCars}}">
-                                        <td>{{field.showroom.company.companyName}}</td>
-                                        <td>{{field.showroom.name}}</td>
-                                        <td>{{field.modelName}}</td>
-                                        <td>{{field.color}}</td>
-                                        <td>{{field.price}}</td>
-                                        <td>{{field.completedAt}}</td>
-                                </tr>
-                        </tbody>
-                </table>
-        </div>
+				<tr lyte-if="{{isOwnedCars}}">
+					<td>{{field.showroom.company.companyName}}</td>
+					<td>{{field.showroom.name}}</td>
+					<td>{{field.modelName}}</td>
+					<td>{{field.color}}</td>
+					<td>{{field.price}}</td>
+					<td>{{field.completedAt}}</td>
+				</tr>
+				<tr lyte-if="{{isManagerPanel}}">
+
+					<td>{{field.model.modelName}}</td>
+					<td>{{field.model.color}}</td>
+					<td>{{field.model.price}}</td>
+					<td>{{field.user.userName}}</td>
+					<td>{{field.bookingType}}</td>
+					<td>{{field.requestDate}}</td>
+					<td class="admin-actions"><lyte-button class="view-showroom-btn"
+							onclick="{{action('approve',field.bookingId)}}">
+							Approve </lyte-button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </template>
-
-
-
-
-
-<!-- <lyte-yield yield-name="content"></lyte-yield> 
-</template> -->

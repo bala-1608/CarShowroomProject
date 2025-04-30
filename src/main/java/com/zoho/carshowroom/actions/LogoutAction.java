@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.zoho.carshowroom.engines.LogoutEngine;
+import com.zoho.carshowroom.util.Utility;
 
 public class LogoutAction extends ActionSupport {
 
@@ -20,19 +20,17 @@ public class LogoutAction extends ActionSupport {
 	private LogoutEngine engine = new LogoutEngine();
 
 	public String execute() throws Exception {
-
-		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
-				.get(ServletActionContext.HTTP_REQUEST);
-
-		HttpServletResponse response = (HttpServletResponse) ActionContext.getContext()
-				.get(ServletActionContext.HTTP_RESPONSE);
+		
+		HttpServletRequest req = ServletActionContext.getRequest();
+		HttpServletResponse res = ServletActionContext.getResponse();
 		switch (httpMethod) {
 		case "delete":
 			try {
 
-				setJsonResponse(engine.delete(request, response));
-
+				setJsonResponse(engine.delete(req, res));
+				Utility.sendResponse(res, jsonResponse);
 				return SUCCESS;
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

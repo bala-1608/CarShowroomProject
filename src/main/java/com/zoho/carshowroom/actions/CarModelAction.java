@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.zoho.carshowroom.engines.ModelsEngine;
 import com.zoho.carshowroom.models.ZModel;
+import com.zoho.carshowroom.util.Utility;
 
 public class CarModelAction extends ActionSupport{
 
@@ -23,15 +28,14 @@ public class CarModelAction extends ActionSupport{
     
     public String execute() {
     	
-    	System.out.println(companyId);
-    	System.out.println(showroomId);
-    	System.out.println(modelId);
+    	HttpServletResponse res = ServletActionContext.getResponse();
     	
         switch (httpMethod.toUpperCase()) {
         
             case "GET":
 			try {
 				setJsonResponse(engine.get(companyId,showroomId,modelId,isAvailable,isActive));
+				Utility.sendResponse(res, jsonResponse);
 				return SUCCESS;
 			} catch (IOException | SQLException e) {
 				e.printStackTrace();

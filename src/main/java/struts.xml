@@ -3,17 +3,19 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
     "struts-2.5.dtd">
 <struts>
-
-	<constant name="struts.devMode" value="true" />
+	<!-- <constant name="struts.devMode" value="true" /> -->
+	<include file="lyte.xml" />
 	<constant name="struts.action.mapping.matching" value="true" />
 	<constant name="struts.enable.SlashesInActionNames"
 		value="true" />
+
+
+
 	<!-- <constant name="struts.mapper.class" value="com.zoho.carshowroom.actions.CustomActionMapper" 
 		/> -->
 
 
 	<package name="base-package" extends="json-default">
-
 
 		<interceptors>
 
@@ -21,43 +23,43 @@
 				class="com.zoho.carshowroom.interceptors.HttpMethodInterceptor" />
 			<interceptor name="validationInterceptor"
 				class="com.zoho.carshowroom.interceptors.ValidationInterceptor" />
-			<interceptor name="authInterceptor"
-				class="com.zoho.carshowroom.interceptors.ValidationInterceptor" />
-			<interceptor name="jsonResponse"
-				class="com.zoho.carshowroom.interceptors.JsonResponseInterceptor" />
-
-
+			<interceptor name="localAgentInterceptor"
+				class="com.zoho.carshowroom.interceptors.RateLimiterInterceptor" />
+			<interceptor name="TimeoutInterceptor"
+				class="com.zoho.carshowroom.interceptors.TimeoutInterceptor" />
 
 			<interceptor-stack name="authInterceptorStack">
-
-
+				<!-- <interceptor-ref name="TimeoutInterceptor" /> -->
+				<interceptor-ref name="localAgentInterceptor" />
 				<interceptor-ref name="httpMethodInterceptor" />
 				<interceptor-ref name="json" />
 				<interceptor-ref name="defaultStack" />
-
-
 			</interceptor-stack>
 
 			<interceptor-stack name="apiInterceptorStack">
-
-
-				<interceptor-ref name="jsonResponse" />
+				<!-- <interceptor-ref name="TimeoutInterceptor" /> --><!-- 
+				<interceptor-ref name="localAgentInterceptor" /> -->
 				<interceptor-ref name="httpMethodInterceptor" />
-				<interceptor-ref name="defaultStack">
-					<param name="exception.logEnabled">true</param>
-					<param name="exception.logLevel">ERROR</param>
-				</interceptor-ref>
-
+				<interceptor-ref name="defaultStack" />
 				<interceptor-ref name="validationInterceptor" />
-
-
-
 
 			</interceptor-stack>
 
-
-
 		</interceptors>
+
+		<global-results>
+
+			<result name="success" type="json">
+				<param name="root">jsonResponse</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonResponse</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root">jsonResponse</param>
+			</result>
+
+		</global-results>
 
 	</package>
 
@@ -67,51 +69,36 @@
 			name="apiInterceptorStack" />
 
 
+
 		<action name="companies"
 			class="com.zoho.carshowroom.actions.CompanyAction">
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
+
 		</action>
 
 		<action name="users"
 			class="com.zoho.carshowroom.actions.UserAction">
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="users/*/bookings"
 			class="com.zoho.carshowroom.actions.BookingAction">
 			<param name="userId">{1}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
+
 		</action>
 
 		<action name="users/*/cars"
 			class="com.zoho.carshowroom.actions.CarAction">
 			<param name="userId">{1}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 
 		<action name="companies/*"
 			class="com.zoho.carshowroom.actions.CompanyAction">
 			<param name="companyId">{1}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="companies/*/showrooms"
 			class="com.zoho.carshowroom.actions.ShowroomAction">
 			<param name="companyId">{1}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 
@@ -120,9 +107,6 @@
 			class="com.zoho.carshowroom.actions.ShowroomAction">
 			<param name="companyId">{1}</param>
 			<param name="showroomId">{2}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 
@@ -131,9 +115,6 @@
 			class="com.zoho.carshowroom.actions.CarModelAction">
 			<param name="companyId">{1}</param>
 			<param name="showroomId">{2}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="companies/*/showrooms/*/models/*"
@@ -142,10 +123,6 @@
 			<param name="companyId">{1}</param>
 			<param name="showroomId">{2}</param>
 			<param name="modelId">{3}</param>
-
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="companies/*/showrooms/*/models/*/bookings"
@@ -155,18 +132,12 @@
 			<param name="showroomId">{2}</param>
 			<param name="modelId">{3}</param>
 
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="companies/*/showrooms/*/bookings"
 			class="com.zoho.carshowroom.actions.BookingAction">
 			<param name="companyId">{1}</param>
 			<param name="showroomId">{2}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<action name="companies/*/showrooms/*/bookings/*"
@@ -174,17 +145,11 @@
 			<param name="companyId">{1}</param>
 			<param name="showroomId">{2}</param>
 			<param name="bookingId">{3}</param>
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 
 		<action name="companies/*/showrooms/*/reports"
 			class="com.zoho.carshowroom.actions.ReportAction">
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
 		</action>
 
 		<!-- <action name="*" class="com.zoho.carshowroom.actions.{1}Action"> <result 
@@ -204,50 +169,18 @@
 
 		<action name="login"
 			class="com.zoho.carshowroom.actions.LoginAction">
-
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-			<result name="input" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-
 		</action>
+
 		<action name="register"
 			class="com.zoho.carshowroom.actions.RegisterAction">
-
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-			<result name="input" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-
 		</action>
+
 		<action name="logout"
 			class="com.zoho.carshowroom.actions.LogoutAction">
-
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-			<result name="input" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-
 		</action>
 
 	</package>
 
-	<package name="default" namespace="/" extends="base-package">
-
-		<action name="*"
-			class="com.zoho.carshowroom.actions.NotFoundAction">
-			<result name="success" type="json">
-				<param name="root">jsonResponse</param>
-			</result>
-		</action>
-
-	</package>
 
 </struts>
     

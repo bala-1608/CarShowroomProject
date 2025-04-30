@@ -4,8 +4,9 @@ Lyte.Router.configureDefaults({
 });
 
 Lyte.Router.configureRoutes(function () {
-	this.route("login",{path:"/"});
-	this.route("register");
+	this.route("index",{path:'/'});
+	this.route("login",{path:"/accounts/login"});
+	this.route("register",{path:"/accounts/register"});
 
 	this.route("tab", function () {
 		this.route("companies", function () {
@@ -23,6 +24,7 @@ Lyte.Router.configureRoutes(function () {
 	});
 	this.route("error-page", { path: "/*" });
 
+	
 });
 
 

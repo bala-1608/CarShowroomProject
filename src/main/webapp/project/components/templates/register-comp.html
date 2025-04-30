@@ -1,27 +1,29 @@
 <template tag-name="register-comp">
-    <div class="container type2">
-        <div class="box">
-            <div class="left-section"></div>
-            <div class="right-section">
-                <div class="in-box">
-                    <div class="authentication-form">
-                        <div class="register-form">
-                            <h2>Sign Up</h2>
-                            <div class="input-group"  lyte-for="{{content}} as field index">
-                                <lyte-input lt-prop-id="{{index}}" lt-prop-type={{field.type}} class="register-input-field"
-                                     lt-prop-placeholder={{field.placeholder}} lt-prop-value="{{lbind(field.value)}}"></lyte-input>
-                                <div lyte-if={{field.errorKey}} class="error">{{field.errorKey}}</div>
-                            </div>
-                            <lyte-button class="btn" onclick=" {{ action ('register') }} ">Submit</lyte-button>
-                            <p class="link-text">
-                                Already have an account? <a href="login">Sign in</a>
-                            </p>
+	<div class="container type2">
+		<div class="box">
+			<div class="left-section"></div>
+			<div class="right-section">
+				<div class="in-box">
+					<div class="authentication-form">
+						<div class="register-form">
+							<h2>Sign Up</h2>
+							<div class="input-group" lyte-for="{{content}} as field index">
+								<lyte-input lt-prop-id="{{index}}" lt-prop-type={{field.type}}
+									class="register-input-field"
+									lt-prop-placeholder={{field.placeholder}}
+									lt-prop-value="{{lbind(field.value)}}"></lyte-input>
+								<div lyte-if={{field.errorKey}} class="error">{{field.errorKey}}</div>
+							</div>
+							<lyte-button class="btn" onclick=" {{ action ('register') }} ">Submit</lyte-button>
+							<p class="link-text">
+								Already have an account? <a href="login">Sign in</a>
+							</p>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </template>

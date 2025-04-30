@@ -31,7 +31,6 @@ store.registerAdapter("cars", {
     if (xhrObj.status === 401) {
       Lyte.Router.transitionTo('login');
     }
-    payLoad.status = xhrObj.status;
     return payLoad;
   }
 });

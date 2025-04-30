@@ -78,7 +78,8 @@ public class QueryBuilder {
 		return this;
 	}
 
-	public QueryBuilder selectQuery(String tableName, String... columns) throws NullPointerException {
+	public QueryBuilder selectQuery(String tableName, String... columns)
+			throws NullPointerException {
 		Utility.checkNull(tableName);
 		Utility.checkNull(columns);
 		query.append("SELECT ");
@@ -88,10 +89,12 @@ public class QueryBuilder {
 			query.append(String.join(", ", columns));
 		}
 		query.append(" FROM ").append(tableName);
+		
 		return this;
 	}
-	
-	public QueryBuilder selectDistinctQuery(String tableName, String... columns) throws NullPointerException {
+
+	public QueryBuilder selectDistinctQuery(String tableName, String... columns)
+			throws NullPointerException {
 		Utility.checkNull(tableName);
 		Utility.checkNull(columns);
 		query.append("SELECT ");
@@ -101,6 +104,7 @@ public class QueryBuilder {
 			query.append("DISTINCT ").append(String.join(", ", columns));
 		}
 		query.append(" FROM ").append(tableName);
+		
 		return this;
 	}
 
@@ -213,15 +217,21 @@ public class QueryBuilder {
 		return this;
 	}
 
-	public QueryBuilder setLimit(int count) throws NullPointerException {
+	public QueryBuilder setLimitAndOffset(int count,int offset) throws NullPointerException {
+		
 		Utility.checkNull(count);
-		query.append(" LIMIT ").append(count);
+		Utility.checkNull(offset);
+		int size=offset;
+		offset=(count-1)*offset;
+		
+		query.append(" LIMIT ").append(size);
+		query.append(" Offset ").append(offset);
 		return this;
 	}
 
 	public QueryBuilder returning(String columnName) {
-		if(columnName!=null)
-		query.append(" RETURNING ").append(columnName);
+		if (columnName != null)
+			query.append(" RETURNING ").append(columnName);
 		return this;
 	}
 

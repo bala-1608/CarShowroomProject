@@ -1,7 +1,6 @@
 package com.zoho.carshowroom.dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,8 @@ public class AuthenticationDAO {
 		builder.selectQuery(TableMapping.USER.getTableName(),TableMapping.getColumnByField(TableMapping.USER, "userId"),
 				TableMapping.getColumnByField(TableMapping.USER, "name"),
 				TableMapping.getColumnByField(TableMapping.USER, "password"),
-				TableMapping.getColumnByField(TableMapping.USER, "role"))
+				TableMapping.getColumnByField(TableMapping.USER, "role"),
+				TableMapping.getColumnByField(TableMapping.USER, "email"))
 				.setWhere(whereColumns, whereOperators, whereValues, logicalOperators);
 		List<Map<String, Object>> data = (List<Map<String, Object>>) executor.executeSQL(builder, null);
 		return data;

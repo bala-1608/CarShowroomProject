@@ -4,20 +4,15 @@
 
 package com.zoho.carshowroom.engines;
 
-import org.json.JSONObject;
 import org.postgresql.util.PSQLException;
 
 import com.zoho.carshowroom.dao.CompanyDAO;
 import com.zoho.carshowroom.dao.DataAccessObject;
-import com.zoho.carshowroom.database.DatabaseConnection;
 import com.zoho.carshowroom.enums.TableMapping;
 import com.zoho.carshowroom.util.Utility;
-import com.zoho.carshowroom.models.ZAddress;
 import com.zoho.carshowroom.models.ZCompany;
-import com.zoho.carshowroom.models.ZUsers;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
@@ -26,11 +21,11 @@ public class CompaniesEngine extends Engine {
 	private final CompanyDAO companyDAO = new CompanyDAO();
 	private final DataAccessObject dao = new DataAccessObject();
 
-	public Map<String, Object> get(Boolean isActive, Integer companyId) throws IOException, SQLException {
+	public Map<String, Object> get(Boolean isActive, Integer companyId,int pageNumber,int pageSize) throws IOException, SQLException {
 		
 		System.out.println("--------------------------");
 
-		List<Map<String, Object>> data = companyDAO.getCompanies(companyId, isActive);
+		List<Map<String, Object>> data = companyDAO.getCompanies(companyId, isActive,pageNumber ,pageSize);
 		if (!data.isEmpty()) {
 			
 			data.forEach(record -> {
@@ -45,7 +40,7 @@ public class CompaniesEngine extends Engine {
 			
 		} else {
 			
-			return Utility.jsonResponse(200, "not found", null);
+			return Utility.jsonResponse(204, "not found", null);
 		}
 
 	}
@@ -129,24 +124,16 @@ public class CompaniesEngine extends Engine {
 //		}
 	//}
 
-	public Map<String, Object> delete(Map<String, String> parts) throws Exception {
+	public Map<String, Object> delete(int companyId) throws Exception {
 
 		System.out.println("--------------------------");
 
-		int brandCode = 0;
-		if (parts.containsKey("companies")) {
-			brandCode = Integer.parseInt(parts.get("companies"));
-		} else {
-			return Utility.jsonResponse(404, "company id null", null);
-		}
-
 		int adminId = dao.delete(TableMapping.COMPANY.getTableName(),
-				TableMapping.getColumnByField(TableMapping.COMPANY, "brandCode"), Utility.EQUAL, brandCode,
+				TableMapping.getColumnByField(TableMapping.COMPANY, "brandCode"), Utility.EQUAL, companyId,
 				TableMapping.getColumnByField(TableMapping.COMPANY, "adminId"));
 
 		if (adminId == 0) {
 			return Utility.jsonResponse(404, "manager not converted to user", null);
-
 		}
 
 		if (dao.downgradeToUser(adminId) > 0) {
@@ -162,22 +149,12 @@ public class CompaniesEngine extends Engine {
 
 	}
 
-	public Map<String, Object> put(Map<String, Object> inputData, Map<String, String> parts) throws Exception {
-		System.out.println("--------------------------");
+	public Map<String, Object> patch(int companyId,ZCompany company) throws Exception {
+		 System.out.println("--------------------------");
 
 		// retrieving company id from URL path
-		int brandCode = 0, rowsAffected = 0;
-		if (parts.containsKey("companies")) {
-			brandCode = Integer.parseInt(parts.get("companies"));
-		} else {
-			return Utility.jsonResponse(404, "company id null", null);
-		}
-
+		int rowsAffected = 0;
 		try {
-
-			System.out.println("--------------------------");
-
-			ZCompany company = ZCompany.companyCreator(inputData);
 
 //			if (!company.isActive()) {
 //				rowsAffected = dao.deactivate(company, TableMapping.getColumnByField(TableMapping.COMPANY, "brandCode"),
@@ -185,14 +162,15 @@ public class CompaniesEngine extends Engine {
 //			}
 
 			rowsAffected = dao.update(company, TableMapping.getColumnByField(TableMapping.COMPANY, "brandCode"),
-					Utility.EQUAL, brandCode, null);
+					Utility.EQUAL, companyId, null);
+			List<Map<String,Object>> result=new ArrayList<>(List.of(Map.of("brand_code",companyId)));
 
 			if (rowsAffected > 0) {
 				System.out.println("Company updated successfully");
-				return Utility.jsonResponse(200, "success", rowsAffected);
-			} else {
+				return Utility.jsonResponse(200, "success", result);
+			}else {
 				System.out.println("Error updating company");
-				return Utility.jsonResponse(404, "not found", rowsAffected);
+				return Utility.jsonResponse(404, "not found", companyId);
 			}
 
 		} catch (PSQLException e) {

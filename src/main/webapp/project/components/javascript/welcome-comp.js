@@ -1,17 +1,18 @@
 Lyte.Component.register("welcome-comp", {
-	data: function () {
+	data : function(){
 		return {
-			userData:Lyte.attr('object')
-		}
+            user:Lyte.attr("object")
+		}		
 	},
-	init: function () {
-		data=store.peekAll('users')[0];
-		this.setData('userData',data);
-	},
-	actions: {
+    init:function(){
+        let userData=store.peekAll('users')[0];
+        this.setData('user',userData);
 
+    },
+	actions : {
+		
 	},
-	methods: {
+	methods : {
 		
 	}
 });

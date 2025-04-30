@@ -3,8 +3,13 @@ package com.zoho.carshowroom.actions;
 import java.sql.SQLException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.zoho.carshowroom.engines.UsersEngine;
+import com.zoho.carshowroom.util.Utility;
 
 public class UserAction extends ActionSupport {
 
@@ -26,11 +31,14 @@ public class UserAction extends ActionSupport {
 		return jsonResponse;
 	}
 
-	public String execute() {
+	public String execute() throws InterruptedException {
+		HttpServletResponse res = ServletActionContext.getResponse();
 		switch (httpMethod.toUpperCase()) {
 		case "GET":
 			try {
 				jsonResponse = engine.get();
+//				Thread.sleep(2000);
+				Utility.sendResponse(res, jsonResponse);
 				return SUCCESS;
 			} catch (SQLException e) {
 				e.printStackTrace();

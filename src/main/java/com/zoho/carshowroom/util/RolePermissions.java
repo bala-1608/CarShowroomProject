@@ -9,7 +9,7 @@ public class RolePermissions {
 	static {
 			
 		ROLE_PERMISSIONS.put("app admin",
-				Map.of("companies", Set.of("POST", "GET", "PUT", "DELETE"),
+				Map.of("companies", Set.of("POST", "GET", "PATCH", "DELETE"),
 						"showrooms", Set.of("GET"),
 						"models", Set.of("GET"),
 						"bookings",Set.of("POST", "GET"),
@@ -18,7 +18,7 @@ public class RolePermissions {
 
 		ROLE_PERMISSIONS.put("admin", 
 				Map.of("companies", Set.of("GET"),
-				"showrooms",Set.of("POST", "GET", "PUT", "DELETE"),
+				"showrooms",Set.of("POST", "GET", "PATCH", "DELETE"),
 				"models", Set.of("POST", "GET", "PUT"),
 				"bookings",Set.of("POST", "GET"),
 				"cars", Set.of("GET", "POST"),
@@ -26,10 +26,10 @@ public class RolePermissions {
 				);
 
 		ROLE_PERMISSIONS.put("manager", Map.of("companies", Set.of("GET"),
-				"cars", Set.of("POST", "GET", "PUT"),
+				"cars", Set.of("POST", "GET", "PATCH"),
 				"reports", Set.of("GET"),
 				"showrooms", Set.of("GET"),
-				"bookings", Set.of("GET", "PUT","POST"),
+				"bookings", Set.of("GET", "PATCH","POST"),
 				"models", Set.of("GET"),
 				"users", Set.of("GET")
 				));
@@ -62,6 +62,14 @@ public class RolePermissions {
 		System.out.println("Access Allowed: " + access);
 		System.out.println("------------------------------------------");
 		return access;
+	}
+	
+	public static boolean hasAccess(String role, boolean js) {
+//		System.out.println("------------------------------------------");
+//		System.out.println("role : "+role );
+//		System.out.println("Access Allowed: " + true);
+//		System.out.println("------------------------------------------");
+		return true;
 	}
 
 	private static String extractResource(String endpoint) {

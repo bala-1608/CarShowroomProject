@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+
 import javax.servlet.http.*;
 
-import org.json.JSONObject;
 
 import com.zoho.carshowroom.dao.AuthenticationDAO;
 import com.zoho.carshowroom.dao.DataAccessObject;
@@ -18,7 +19,6 @@ import com.zoho.carshowroom.util.Utility;
 import com.zoho.carshowroom.models.ZSession;
 import com.zoho.carshowroom.models.ZUsers;
 
-import java.util.UUID;
 
 public class LoginEngine  {
 	
@@ -39,7 +39,7 @@ public class LoginEngine  {
 			
 
 			if (data == null || data.isEmpty()) {
-				return Utility.jsonResponse( 200, "register first", null);
+				return Utility.jsonResponse( 404, "register first", null);
 			}
 
 			//storing user id ,password and role
@@ -49,22 +49,22 @@ public class LoginEngine  {
 			int role = (int) data.get(0).get((TableMapping.getColumnByField(TableMapping.USER, "role")));
 
 			if (!Utility.checkPassword(user.getPassword(), storedPassword)) {
-				return Utility.jsonResponse(200, "password mismatch", null);
+				return Utility.jsonResponse(401, "password mismatch", null);
 				
 			}
 
 			//generating sessionId with uuid
 			long expiry = System.currentTimeMillis();
-			String uuid = UUID.randomUUID().toString();
+//			 
+			String uuid =Utility.UUIDGenerator();
 
 			ZSession ses = new ZSession(uuid, (short) role, userId, expiry);
 			if (!dao.create(ses,null).isEmpty()) {
 				
 				addCookie(response,uuid);
 				data.get(0).put(TableMapping.getColumnByField(TableMapping.USER, "role"), UserRole.fromValue(role));
-				data.get(0).remove(TableMapping.getColumnByField(TableMapping.USER, "password"));
+//				data.get(0).remove(TableMapping.getColumnByField(TableMapping.USER, "password"));
 				
-
 				return Utility.jsonResponse( 200, "success", data);
 				
 			} else {

@@ -146,8 +146,8 @@ public class BookingsEngine extends Engine {
 		str.append(TableMapping.CARBOOKING.getTableName()).append(".")
 				.append(TableMapping.getColumnByField(TableMapping.CARBOOKING, "carId"));
 
-		columns = List.of("ZModel.name AS Model_name", "ZUsers.name", "booking_type", "ZCarBooking.price",
-				"ZCarBooking.status", "ZCarBooking.booking_id");
+		columns = List.of("ZModel.name AS Model_name","ZCar.color", "ZUsers.name", "booking_type", "ZCarBooking.price",
+				"ZCarBooking.status", "ZCarBooking.booking_id","ZCarBooking.customer_id","ZCarBooking.request_date","ZModel.model_id");
 
 		str.setLength(0);
 		str.append(TableMapping.CAR.getTableName()).append(".")
@@ -206,6 +206,10 @@ public class BookingsEngine extends Engine {
 							.get(TableMapping.getColumnByField(TableMapping.CARBOOKING, "bookingType"));
 					result.get(i).put(TableMapping.getColumnByField(TableMapping.CARBOOKING, "bookingType"),
 							BookingType.fromValue(type));
+				}
+				if (result.get(i).containsKey(TableMapping.getColumnByField(TableMapping.CARBOOKING, "requestDate"))) {
+					Date date=new Date((long) result.get(i).get("request_date"));
+					result.get(i).put("request_date",date);
 				}
 			}
 
@@ -289,7 +293,7 @@ public class BookingsEngine extends Engine {
 
 		
 		long current = System.currentTimeMillis();
-		System.out.println(current);
+		
 		booking.setRequestDate(current);
 		if (Utility.isNull(userId)) {
 

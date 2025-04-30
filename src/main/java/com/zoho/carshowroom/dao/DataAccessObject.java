@@ -3,7 +3,6 @@ package com.zoho.carshowroom.dao;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import com.zoho.carshowroom.database.QueryExecutor;
 import com.zoho.carshowroom.enums.TableMapping;
 import com.zoho.carshowroom.util.Utility;
 import com.zoho.carshowroom.models.ZAddress;
-import com.zoho.carshowroom.models.ZSession;
 import com.zoho.carshowroom.models.ZUsers;
 
 public class DataAccessObject {
@@ -154,7 +152,7 @@ public class DataAccessObject {
 		List<Object> whereValues = List.of(address.getDoorNo(), address.getStreet(), address.getCity(),
 				address.getPostalCode());
 
-		builder.selectQuery(TableMapping.ADDRESS.getTableName(),
+		builder.selectQuery(TableMapping.ADDRESS.getTableName(),null,null,
 				TableMapping.getColumnByField(TableMapping.ADDRESS, "addressId"));
 		builder.setWhere(whereColumns, whereOperators, whereValues, logicOperators);
 
@@ -162,6 +160,7 @@ public class DataAccessObject {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> fetchRecords(String tableName, Map<String, String> aggregates,
 			List<String> columns, List<String> joinTables, List<String> joinConditions, List<String> joinTypes,
 			List<String> whereColumns, List<String> whereOperators, List<Object> whereValues,
@@ -209,9 +208,7 @@ public class DataAccessObject {
 		}
 
 		Utility.boundaryCheck(limit);
-		if (!Utility.isNull(limit)) {
-			builder.setLimit(limit);
-		}
+		
 
 		return (List<Map<String, Object>>) executor.executeSQL(builder, null);
 	}
@@ -222,7 +219,7 @@ public class DataAccessObject {
 
 		try {
 
-			builder.selectQuery(TableMapping.SESSION.getTableName(), Utility.ALL_COLUMNS).setWhere(
+			builder.selectQuery(TableMapping.SESSION.getTableName(),null,null, Utility.ALL_COLUMNS).setWhere(
 					TableMapping.getColumnByField(TableMapping.SESSION, "sessionId"), Utility.EQUAL, sessionId);
 			List<Map<String, Object>> data = (List<Map<String, Object>>) executor.executeSQL(builder, null);
 			if (data == null || data.isEmpty()) {

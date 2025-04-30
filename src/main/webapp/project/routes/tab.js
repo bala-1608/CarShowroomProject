@@ -1,5 +1,11 @@
 Lyte.Router.registerRoute("tab", {
 	beforeModel: function (paramsObject) {
+
+		let prevTrans = Lyte.Router.getRouteInstance().transition._processed.prevTrans;
+		if(prevTrans&&prevTrans.target&&prevTrans.target==='login'){
+            window.location.reload();
+		}
+		
 		let value =  document.cookie;
 			let index = value.indexOf("=");
 			let sessionId=value.substring(index+1,value.length);
@@ -24,6 +30,7 @@ Lyte.Router.registerRoute("tab", {
 			});
 		}
 	},
+	
 	renderTemplate: function (model, paramsObject) {
 		return {
 			outlet: "#outlet",

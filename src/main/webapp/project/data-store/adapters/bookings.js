@@ -2,6 +2,8 @@ store.registerAdapter("bookings", {
 
   buildURL: function (modelName, type, queryParams, payLoad, url, actionName, customData) {
     let basePath = 'http://localhost:8080/CarShowroom/api/v1';
+    let user = store.peekAll('users')[0];
+
     if (type === 'createRecord') {
 
       let companyId = customData.companyId;
@@ -11,11 +13,18 @@ store.registerAdapter("bookings", {
       basePath = basePath+`/companies/${companyId}/showrooms/${showroomId}/models/${modelId}/bookings`;
 
     }
+    else if(customData&&customData.companyId&&type==='findAll'){
+      let companyId = user.company.id;
+      let showroomId = user.showroom.id;
+      basePath = basePath+`/companies/${companyId}/showrooms/${showroomId}/bookings`;
+
+    }
 
     else if (type === 'findAll') {
-      let userId = store.peekAll('users')[0].userId;
+      let userId=user.userId;
       basePath =  basePath+`/users/${userId}/bookings`
     }
+    
 
     return basePath;
   },
@@ -30,7 +39,6 @@ store.registerAdapter("bookings", {
     if (xhrObj.status === 401) {
       Lyte.Router.transitionTo('login');
     }
-    payLoad.status = xhrObj.status;
     return payLoad;
   }
 });

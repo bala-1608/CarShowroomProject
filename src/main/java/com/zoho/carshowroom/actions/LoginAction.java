@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import com.zoho.carshowroom.engines.LoginEngine;
@@ -39,6 +38,7 @@ public class LoginAction extends ActionSupport implements  ModelDriven<ZUsers> {
     }
 	
 	public void validate() {
+		
 		
 		user.setEmail(email);
 		user.setPassword(password);
@@ -82,13 +82,13 @@ public class LoginAction extends ActionSupport implements  ModelDriven<ZUsers> {
 
 	public String execute() throws Exception {
 		
-		HttpServletResponse response = (HttpServletResponse) ActionContext.getContext()
-	            .get(ServletActionContext.HTTP_RESPONSE);
+		HttpServletResponse res = ServletActionContext.getResponse();
 		switch (httpMethod) {
 		case "post":
 			try {
 				try {
-					jsonResponse = engine.post(user,response);
+					jsonResponse = engine.post(user,res);
+					Utility.sendResponse(res, jsonResponse);
 				} catch (IllegalAccessException | NullPointerException | IOException e) {
 					
 					e.printStackTrace();
